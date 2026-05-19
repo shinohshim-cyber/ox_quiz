@@ -22,16 +22,17 @@
 
             <form
                     action="/quiz/update"
-                    method="post">
+                    method="post"
+                    th:object="${dto}">
 
                 <input type="hidden" th:field="*{id}">
 
                 <div class="mb-3">
-                    <label class="form-label">
+                    <label class="form-label" >
                         퀴즈 내용
                     </label>
 
-                    <textarea rows="5" class="form-control">
+                    <textarea rows="5" class="form-control" th:field="*{content}">
                     </textarea>
                 </div>
 
@@ -41,11 +42,13 @@
                         퀴즈 정답
                     </label>
 
-                    <div class="form-check form-check-inline">
+                    <div class="form-check form-check-inline" >
 
-                        <input
+                        <input th:field="*{answer}"
+                                th:value="true"
+                                th:checked="*{answer}"
                                 class="form-check-input"
-                                type="radio" value="true">
+                                type="radio" >
 
                         <label class="form-check-label">
                             O
@@ -53,11 +56,13 @@
 
                     </div>
 
-                    <div class="form-check form-check-inline">
+                    <div class="form-check form-check-inline" >
 
-                        <input
+                        <input th:field="*{answer}"
+                                th:value="false"
+                                th:checked="*{!answer}"
                                 class="form-check-input"
-                                type="radio" value="false">
+                                type="radio" >
 
                         <label class="form-check-label">
                             X
@@ -73,7 +78,7 @@
                         작성자
                     </label>
 
-                    <input
+                    <input th:field="*{writer}"
                             type="text" class="form-control">
 
                 </div>

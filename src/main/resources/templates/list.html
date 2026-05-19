@@ -22,10 +22,11 @@
         <div class="d-flex align-items-center gap-2">
 
             <!-- 로그인 상태 -->
-            <div class="d-flex align-items-center gap-2">
+            <div class="d-flex align-items-center gap-2"
+                        th:if="${session.dto.id != null}">
 
                 <span class="fw-bold text-primary">
-                    <span>유저이름</span> 님
+                    <span th:text="${session.dto.id}">유저이름</span> 님
                 </span>
 
                 <a href="/admin/members"
@@ -41,7 +42,7 @@
             </div>
 
             <!-- 비로그인 상태 -->
-            <div class="d-flex gap-2">
+            <div class="d-flex gap-2" th:if="${session.dto.id == null}">
                 <a
                         href="/member/login"
                         class="btn btn-outline-primary btn-sm">
@@ -66,7 +67,7 @@
         </div>
 
         <div class="card-body">
-            <form action="/quiz/insert" method="post">
+            <form action="/quiz/insert" method="post" th:object="${dto}">
 
                 <div class="mb-3">
                     <label class="form-label">퀴즈 내용</label>
@@ -131,7 +132,7 @@
             등록된 퀴즈 목록
         </h2>
 
-        <a
+        <a th:if="${quizList != null}"
                 href="/quiz/play"
                 class="btn btn-success">
             퀴즈 플레이
@@ -139,7 +140,8 @@
     </div>
 
     <!-- 퀴즈 목록 -->
-    <table class="table table-bordered table-hover align-middle">
+    <table class="table table-bordered table-hover align-middle"
+           th:if="${quizList != null}">
 
         <thead class="table-dark">
         <tr>
@@ -153,25 +155,25 @@
         </thead>
 
         <tbody>
-        <tr>
+        <tr th:each="quiz : ${quizList}" th:object="${quiz}">
 
-            <td>1</td>
+            <td th:text="*{id}">1</td>
 
-            <td>
+            <td th:text="*{content}">
                 달팽이도 이빨이 있다.
             </td>
 
             <td>
-                <span class="badge bg-primary">
+                <span class="badge bg-primary" th:if="*{answer == True}">
                     O
                 </span>
 
-                <span class="badge bg-danger">
+                <span class="badge bg-danger" th:if="*{answer == False}">
                     X
                 </span>
             </td>
 
-            <td>
+            <td th:text="*{writer}">
                 홍길동
             </td>
 
@@ -203,7 +205,8 @@
     </table>
 
     <!-- 퀴즈가 없을 때 -->
-    <div class="alert alert-secondary text-center">
+    <div class="alert alert-secondary text-center"
+        th:if="${quizList == null}">
         등록된 퀴즈가 없습니다.
     </div>
 

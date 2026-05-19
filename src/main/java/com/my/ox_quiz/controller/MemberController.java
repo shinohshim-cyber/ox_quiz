@@ -5,6 +5,7 @@ import com.my.ox_quiz.entity.RoleType;
 import com.my.ox_quiz.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -45,9 +46,7 @@ public class MemberController {
             redirectAttributes.addFlashAttribute("message", "로그인실패");
             return "redirect:/member/login";
         }
-        session.setAttribute("loginId", loginedDto.getId());
-        session.setAttribute("role", loginedDto.getRole());
-        session.setAttribute("status", loginedDto.getStatus());
+        session.setAttribute("dto", loginedDto);
         if(loginedDto.getRole() == RoleType.ADMIN){
             return "my-page";
         }
@@ -71,5 +70,9 @@ public class MemberController {
             model.addAttribute("memberList", memberDto);
         }
         return "list";
+    }
+    @GetMapping("my-page")
+    public String mypage(){
+        return "my-page";
     }
 }
