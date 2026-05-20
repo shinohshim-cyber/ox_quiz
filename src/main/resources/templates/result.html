@@ -21,12 +21,12 @@
             </h1>
 
             <!-- 정답일 때 -->
-            <h2 class="mb-5 text-primary">
+            <h2 class="mb-5 text-primary" th:if="${result == success}">
                 정답입니다! 🎉
             </h2>
 
             <!-- 오답일 때 -->
-            <h2 class="mb-5 text-danger">
+            <h2 class="mb-5 text-danger" th:if="${result == fail}">>
                 오답입니다. 😢
             </h2>
 
@@ -38,13 +38,21 @@
 
             <!-- ADMIN일 때 -->
             <a href="/quiz"
-               class="btn btn-secondary">
+               class="btn btn-secondary"
+                th:if="${session.dto != null and
+                            session.dto.id != null and
+                            session.dto.role.name()=='ADMIN'}">
+
                 퀴즈 관리
             </a>
 
             <!-- USER일 때 -->
             <a href="/member/my-page"
-               class="btn btn-secondary">
+               class="btn btn-secondary"
+               th:if="${session.dto != null and
+                            session.dto.id != null and
+                            session.dto.role.name()=='USER'}">
+
                 마이페이지
             </a>
 

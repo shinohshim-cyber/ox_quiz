@@ -23,25 +23,28 @@
 
             <!-- 승인 완료 회원만 퀴즈 플레이 가능 -->
             <a href="/quiz/play"
-                    class="btn btn-success">
+                    class="btn btn-success"
+                    th:if="${session.dto.id != null and session.dto.status.name() == 'APPROVED'}">
                 퀴즈 플레이
             </a>
 
             <!-- 승인 전 회원 -->
-            <button class="btn btn-secondary"
-                    disabled>
+            <button class="btn btn-secondary" disabled
+                    th:if="${session.dto.id != null and session.dto.status.name() == 'PENDING'}">
                 승인 필요
             </button>
 
             <!-- 관리자만 퀴즈 관리 이동 -->
             <a href="/quiz"
-                    class="btn btn-dark">
+                    class="btn btn-dark"
+                    th:if="${session.dto.id != null and session.dto.role.name() == 'ADMIN'}"                    >
                 퀴즈 관리
             </a>
 
             <a
                     href="/member/logout"
-                    class="btn btn-outline-danger">
+                    class="btn btn-outline-danger"
+                    th:if="${session.dto.id != null}">
                 로그아웃
             </a>
 
@@ -50,16 +53,24 @@
     </div>
 
     <!-- 승인 상태 안내 -->
-    <div class="alert alert-success">
+    <div class="alert alert-success"
+         th:if="${session.dto.id != null and
+         session.dto.role.name() == 'USER' and
+         session.dto.status.name() == 'APPROVED'}">
         관리자 승인이 완료되었습니다. 퀴즈 플레이가 가능합니다.
     </div>
 
-    <div class="alert alert-warning">
+    <div class="alert alert-warning"
+         th:if="${session.dto.id != null and
+         session.dto.role.name() == 'USER' and
+         session.dto.status.name() == 'PENDING'}">
         관리자 승인 후 퀴즈 플레이가 가능합니다.
     </div>
 
     <!-- 메시지 -->
-    <div class="alert alert-info" >
+    <div class="alert alert-info"
+        th:if="${message}"
+        th:text="${message}">
         비밀번호가 수정되었습니다.
     </div>
 
@@ -78,7 +89,7 @@
 
                 <tr>
                     <th style="width: 200px;">아이디</th>
-                    <td>
+                    <td th:text="${session.dto.id}">
                         user01
                     </td>
                 </tr>
@@ -86,11 +97,13 @@
                 <tr>
                     <th>권한</th>
                     <td>
-                        <span class="badge bg-danger">
+                        <span class="badge bg-danger"
+                             th:if="${session.dto.role.name() == 'ADMIN'}">
                             ADMIN
                         </span>
 
-                        <span class="badge bg-primary">
+                        <span class="badge bg-primary"
+                             th:if="${session.dto.role.name() == 'USER'}">
                             USER
                         </span>
                     </td>
@@ -99,11 +112,13 @@
                 <tr>
                     <th>승인 상태</th>
                     <td>
-                        <span class="badge bg-success">
+                        <span class="badge bg-success"
+                              th:if="${session.dto.status.name() == 'APPROVED'}">
                             승인 완료
                         </span>
 
-                        <span class="badge bg-secondary">
+                        <span class="badge bg-secondary"
+                              th:if="${session.dto.status.name() == 'PENDING'}">
                             승인 대기
                         </span>
                     </td>
@@ -113,7 +128,8 @@
                     <th>맞은 문제 수</th>
                     <td>
                         <span
-                                class="badge bg-primary">
+                                class="badge bg-primary"
+                                th:text="${session.dto.answerTrue}">
                             0
                         </span>
                     </td>
@@ -123,7 +139,8 @@
                     <th>틀린 문제 수</th>
                     <td>
                         <span
-                                class="badge bg-danger">
+                                class="badge bg-danger"
+                                th:text="${session.dto.answerFalse}">
                             0
                         </span>
                     </td>
@@ -131,7 +148,7 @@
 
                 <tr>
                     <th>가입일</th>
-                    <td>
+                    <td th:text="${#temporals.format(session.dto.createdAt, 'yyyy-MM-dd HH:mm')}">
                         2026-05-16 10:00
                     </td>
                 </tr>
@@ -193,6 +210,8 @@
                         class="btn btn-warning">
                     비밀번호 수정
                 </button>
+
+                <input type="hidden" th:value="${session.dto.no}" name="no">
 
             </form>
 

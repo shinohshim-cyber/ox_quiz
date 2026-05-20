@@ -26,7 +26,8 @@
                 Spring Boot + Thymeleaf + JPA 기반 OX 퀴즈 프로젝트
             </p>
 
-            <div class="d-flex gap-3 justify-content-center">
+            <div class="d-flex gap-3 justify-content-center"
+                 th:if="${session.dto == null or session.dto.id == null}">
 
                 <a
                         href="/member/login"
@@ -42,14 +43,22 @@
 
             </div>
 
-            <div class="mt-5 text-muted">
+            <div class="d-flex gap-3 justify-content-center"
+                 th:if="${session.dto != null and session.dto.id != null}">
+
+                <a
+                        href="/member/logout"
+                        class="btn btn-primary btn-lg">
+                    로그아웃
+                </a>
+
+            </div>
+
+            <div class="mt-5 text-muted"
+                 th:if="${session.dto == null or session.dto.id == null}">
 
                 <p>
                     일반 회원은 관리자 승인 후 로그인 가능합니다.
-                </p>
-
-                <p>
-                    관리자 계정 : root / admin
                 </p>
 
             </div>

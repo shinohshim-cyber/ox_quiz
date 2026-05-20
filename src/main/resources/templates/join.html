@@ -74,5 +74,29 @@
     </div>
 
 </div>
+
+<script>
+    function checkPassword() {
+
+        const password =
+            document.getElementById("password").value;
+
+        const passwordCheck =
+            document.getElementById("passwordCheck").value;
+
+        const message =
+            document.getElementById("passwordMessage");
+
+        if (password !== passwordCheck) {
+
+            message.textContent =
+                "비밀번호가 일치하지 않습니다.";
+
+            return false;
+        }
+
+        return true;
+    }
+</script>
 </body>
 </html>
