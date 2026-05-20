@@ -1,6 +1,7 @@
 package com.my.ox_quiz.controller;
 
 import com.my.ox_quiz.dto.MemberDto;
+import com.my.ox_quiz.entity.MemberStatus;
 import com.my.ox_quiz.entity.RoleType;
 import com.my.ox_quiz.service.MemberService;
 import jakarta.servlet.http.HttpSession;
@@ -12,6 +13,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -71,8 +73,26 @@ public class MemberController {
         }
         return "list";
     }
+
     @GetMapping("my-page")
     public String mypage(){
         return "my-page";
+    }
+
+    @PostMapping("approve")
+    public String approve(@RequestParam("no") Long no) {
+        memberService.approve(no);
+        return "redirect:/admin/members";
+    }
+
+    @PostMapping("password")
+    public String password(@RequestParam("no") Long no,
+                           @RequestParam("password") String password,
+                           HttpSession session){
+        MemberDto loginDto = (MemberDto) session.getAttribute("dto");
+        memberService.updatePassword(no, password);
+        if(loginDto.getRole() == RoleType.ADMIN)
+            return "redirect:/admin/members";
+        return "redirect:/member/logout";
     }
 }

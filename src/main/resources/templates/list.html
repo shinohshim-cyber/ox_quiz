@@ -155,20 +155,20 @@
         </thead>
 
         <tbody>
-        <tr th:each="quiz : ${quizList}" th:object="${quiz}">
+        <tr th:each="quiz, i : ${quizList}" th:object="${quiz}">
 
-            <td th:text="*{id}">1</td>
+            <td th:text="${i.index+1}">1</td>
 
             <td th:text="*{content}">
                 달팽이도 이빨이 있다.
             </td>
 
             <td>
-                <span class="badge bg-primary" th:if="*{answer == True}">
+                <span class="badge bg-primary" th:if="*{answer == true}">
                     O
                 </span>
 
-                <span class="badge bg-danger" th:if="*{answer == False}">
+                <span class="badge bg-danger" th:if="*{answer == false}">
                     X
                 </span>
             </td>
@@ -196,7 +196,7 @@
                             class="btn btn-danger btn-sm">
                         삭제
                     </button>
-
+                    <input type="hidden" th:value="*{id}" name="deleteId">
                 </form>
             </td>
 

@@ -49,4 +49,24 @@ public class MemberService {
     public List<MemberDto> findAll() {
         return memberRepository.findAll().stream().map(x -> MemberDto.toDto(x)).toList();
     }
+
+    public void approve(Long no) {
+        Member member = memberRepository.findById(no).orElse(null);
+        if(member != null) {
+            member.setStatus(MemberStatus.APPROVED);
+            memberRepository.save(member);
+        }
+    }
+
+    public void updatePassword(Long no, String password) {
+        Member member = memberRepository.findById(no).orElse(null);
+        if(member != null) {
+            member.setPassword(passwordEncoder.encode(password));
+            memberRepository.save(member);
+        }
+    }
+
+    public void save(MemberDto dto) {
+        memberRepository.save(MemberDto.toEntity(dto));
+    }
 }

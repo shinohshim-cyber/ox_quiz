@@ -1,11 +1,13 @@
 package com.my.ox_quiz.interceptor;
 
+import com.my.ox_quiz.dto.MemberDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
-
+@Component
 public class MyInterceptor implements HandlerInterceptor {
     //  특정 상황이 됐을 때 컨트롤러 가로채서
     //  특정 동작을 수행하는 클래스
@@ -20,8 +22,8 @@ public class MyInterceptor implements HandlerInterceptor {
             Object handler) throws Exception {
         //  컨트롤러로 전달되는 세션값 받는 것
         HttpSession session = request.getSession();
-        Object loginId = session.getAttribute("id");
-        if(ObjectUtils.isEmpty(loginId)){
+        MemberDto loginDto = (MemberDto)session.getAttribute("dto");
+        if(ObjectUtils.isEmpty(loginDto)){
             //  로그인하지 않은 경우
             response.sendRedirect("/member/login");
             return false;   //  false : 컨트롤러 실행 중단

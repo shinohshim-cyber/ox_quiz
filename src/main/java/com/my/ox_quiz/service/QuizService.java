@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +38,7 @@ public class QuizService {
         quizRepository.save(QuizDto.toEntity(dto));
     }
 
-    public void delete(QuizDto dto) {
-        quizRepository.delete(QuizDto.toEntity(dto));
+    public void delete(Long deleteId) {
+        quizRepository.deleteById(deleteId);
     }
 }

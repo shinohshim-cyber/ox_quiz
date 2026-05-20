@@ -2,6 +2,7 @@ package com.my.ox_quiz.controller;
 
 import com.my.ox_quiz.dto.MemberDto;
 import com.my.ox_quiz.dto.QuizDto;
+import com.my.ox_quiz.service.MemberService;
 import com.my.ox_quiz.service.QuizService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/quiz")
 @RequiredArgsConstructor
 public class QuizController {
+    private final MemberService memberService;
     private final QuizService quizService;
     @GetMapping({"", "/"})
     public String list(HttpSession session){
@@ -22,8 +24,9 @@ public class QuizController {
     }
 
     @GetMapping("play")
-    public String play(Model model){
+    public String play(HttpSession session, Model model){
         QuizDto dto = quizService.findByOne();
+        log.info("quiz = " + dto);
         model.addAttribute("dto", dto);
         return "play";
     }
@@ -51,9 +54,33 @@ public class QuizController {
     }
 
     @PostMapping("delete")
-    public String delete(QuizDto dto){
-        log.info("delete dto = " + dto);
-        quizService.delete(dto);
+    public String delete(@RequestParam("deleteId") Long deleteId){
+        log.info("delete id = " + deleteId);
+        quizService.delete(deleteId);
         return "redirect:/admin";
+    }
+
+    @PostMapping("check")
+    public String check(@RequestParam("id") Long id,
+                        @RequestParam("userAnswer") boolean answer,
+                        HttpSession session,
+                        Model model)
+    {
+        QuizDto dto = quizService.findById(id);
+        MemberDto loginDto = (MemberDto) session.getAttribute("dto");
+        if(dto.isAnswer() == answer){
+            Integer count = loginDto.getAnswerTrue();
+            log.info("AnswerTrue = " + count);
+            loginDto.setAnswerTrue(count + 1);
+            model.addAttribute("result", "success");
+        }
+        else {
+            Integer count = loginDto.getAnswerFalse();
+            log.info("AnswerFalse = " + count);
+            loginDto.setAnswerFalse(count + 1);
+            model.addAttribute("result", "fail");
+        }
+        memberService.save(loginDto);
+        return "result";
     }
 }

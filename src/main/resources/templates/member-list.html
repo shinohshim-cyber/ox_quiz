@@ -35,57 +35,58 @@
         </tr>
         </thead>
 
-        <tbody>
+        <tbody th:each="member, i : ${members}" th:object="${member}">
         <tr>
 
-            <td>1</td>
+            <td th:text="${i.index+1}">1</td>
 
-            <td>user01</td>
+            <td th:text="*{id}">user01</td>
 
             <td>
-                <span class="badge bg-danger">
+                <span class="badge bg-danger" th:if="*{role.name() == 'ADMIN'}">
                     ADMIN
                 </span>
 
-                <span class="badge bg-primary">
+                <span class="badge bg-primary" th:if="*{role.name() == 'USER'}">
                     USER
                 </span>
             </td>
 
             <td>
-                <span class="badge bg-success">
+                <span class="badge bg-success" th:if="*{status.name() == 'APPROVED'}">
                     승인
                 </span>
 
-                <span class="badge bg-secondary">
+                <span class="badge bg-secondary" th:if="*{status.name() == 'PENDING'}">
                     미승인
                 </span>
             </td>
 
-            <td>0</td>
+            <td th:text="*{answerTrue}">0</td>
 
-            <td>0</td>
+            <td th:text="*{answerFalse}">0</td>
 
             <td>
-                <form
-                        action="/admin/member/approve"
+                <form th:if="*{status.name() == 'PENDING'}"
+                        action="/member/approve"
                         method="post">
                     <button
                             type="submit"
                             class="btn btn-success btn-sm">
                         승인
                     </button>
-
+                    <input type="hidden" th:value="*{no}" name="no">
                 </form>
 
-                <span class="text-muted">
+                <span class="text-muted"
+                        th:if="*{status.name() == 'APPROVED'}">
                     완료
                 </span>
             </td>
 
             <td>
                 <form
-                        action="/admin/member/password"
+                        action="/member/password"
                         method="post"
                         class="d-flex gap-2">
 
@@ -100,7 +101,7 @@
                             class="btn btn-warning btn-sm">
                         수정
                     </button>
-
+                    <input type="hidden" th:value="*{no}" name="no">
                 </form>
             </td>
 
